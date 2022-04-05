@@ -97,7 +97,7 @@ for x in lista_dos_arquivos_csv:
         ############## EXPORTAR DATAFRAME PARA EXCEL ##############
 
         data.to_excel(f'{lista_dos_arquivos_csv[w]}_formatado.xlsx', index=False)                                       # index=False é para não sair com uma coluna com núemro das linhas
-        data.to_csv(f'{lista_dos_arquivos_csv[w]}_formatado.csv', index=False, encoding='utf-8', sep=';')               # sep=';' para salvar os dados já separados
+        data.to_csv(f'{lista_dos_arquivos_csv[w]}_formatado.csv', index=False, encoding='utf-8-sig', sep=';')               # sep=';' para salvar os dados já separados
 
 
 fim = time.time()  # fim do tempo de processamento
