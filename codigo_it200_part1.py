@@ -7,12 +7,15 @@
 from selenium import webdriver
 from selenium.webdriver.chrome.service import Service
 from selenium.webdriver.common.by import By
+from selenium.common.exceptions import NoSuchElementException
 import time
 
-dir = "D:\15.1 Mestrado\1.4 - Semestre\IT200 - Infraestrutura Aeronáutica\it200_codigo"           # esse vai ser o direório para onde o arquivo vai após o download. Para ir para outro diretório, modificar o caminho.
+dir = r"D:\15.1 Mestrado\1.4 - Semestre\IT200 - Infraestrutura Aeronáutica\it200_codigo\\"           # esse vai ser o direório para onde o arquivo vai após o download. Para ir para outro diretório, modificar o caminho.
 
 chrome_options = webdriver.ChromeOptions()
-prefs = {"download.default_directory": "D:\15.1 Mestrado\1.4 - Semestre\IT200 - Infraestrutura Aeronáutica\it200_codigo", "directory_upgrade": True}
+prefs = {"download.default_directory": dir,         # precisa colocar a letra r antes e os dois \\ no final do caminho para poder ir para a pasta desejada
+         "directory_upgrade": True
+         }
 chrome_options.add_experimental_option('prefs', prefs)
 
 path = Service("C:\Program Files (x86)\chromedriver.exe")                        # local onde o chromedriver está instalado. Se estiver instalado em outro local, modificar o caminho.
@@ -24,20 +27,32 @@ driver.get(url)         # acessar o site
 
 
 ### ACEITAR OS COOKIES DO SITE DA ANAC
-cookie = driver.find_element(by=By.XPATH, value="//*[@id='lgpd-cookie-banner-janela']/div[2]/button")           # aceitar os cookies da página
-cookie.click()
-
-time.sleep(2)       # tempo de 2 segundo para executar o outro click
+try:
+    cookie = driver.find_element(by=By.XPATH, value="//*[@id='lgpd-cookie-banner-janela']/div[2]/button")           # aceitar os cookies da página
+    cookie.click()
+    print('Cookies aceitos com sucesso! \n')
+except NoSuchElementException:
+    print("Não foi possível encotrar o caminho para aceitar os cookies! \n")
+time.sleep(2)       # tempo de 2 segundoS para executar o outro click
 
 ### DOWNLOAD DO ARQUIVO DE AERÓDROMOS PRIVADOS
-ad_priv = driver.find_element(by=By.XPATH, value="/html/body/div[3]/div[1]/main/div[2]/div/div[5]/div/p[3]/a[1]")           # clicar no link dos aeródromos privados
-ad_priv.click()
+try:
+    ad_priv = driver.find_element(by=By.XPATH, value="/html/body/div[3]/div[1]/main/div[2]/div/div[5]/div/p[3]/a[1]")           # clicar no link dos aeródromos privados
+    ad_priv.click()
+    print('Download da base de aeródromos públicos realizado com sucesso! \n')
+except NoSuchElementException:
+    print("Não foi possível encontrar o caminho do arquivo para realizar o Download da base de aeródromos públicos!")
 
 time.sleep(2)
 
 ### DOWNLOAD DO ARQUIVO DE AERÓDROMOS PRIVADOS
-ad_pub = driver.find_element(by=By.XPATH, value="/html/body/div[3]/div[1]/main/div[2]/div/div[5]/div/p[4]/a[1]")           # clicar no link dos aeródromos públicos
-ad_pub.click()
+"""try:
+    ad_pub = driver.find_element(by=By.XPATH, value="/html/body/div[3]/div[1]/main/div[2]/div/div[5]/div/p[4]/a[1]")           # clicar no link dos aeródromos públicos
+    ad_pub.click()
+    print('Download da base de aeródromos privados realizado com sucesso!')
+except NoSuchElementException:
+    print("Não foi possível encontrar o caminho do arquivo para realizar o Download da base de aeródromos privados!")
+"""
 
 time.sleep(2)
 driver.close()      # para fechar a página web aberta após clicar nos links
