@@ -11,6 +11,7 @@ import os
 import pandas as pd
 import re
 import time
+import string
 
 inicio = time.time()                                                                                                # começa a contar o tempo de processamento
 
@@ -41,14 +42,18 @@ for x in lista_dos_arquivos_csv:
         data = data.fillna("NA")
         print(f'\n \033[1;30;43m Visualização do DataFrame {w}, de nome {lista_dos_arquivos_csv[w]}: \033[m \n ', data)
 
-        """############## LIMPAR DADOS: REMOVER CARACTERES ESPECIAIS E SUBSTITUI-LOS POR "_" ##############
+        ############## LIMPAR DADOS: REMOVER CARACTERES ESPECIAIS E SUBSTITUI-LOS POR "_" ##############
 
-        punctuation = lambda x: re.sub('[%s]' % re.escape(string.punctuation), "_", x)  # remove pontuações de qualquer tipo das strings e as substitui por nada "_"
+        ## Formatar nome das colunas
+        data.columns = data.columns.str.normalize('NFKD').str.encode('ascii', errors='ignore').str.decode('utf-8').str.replace(" ", "_")  # remove os acentos das palavras e substitui espaços por '_' do nome das colunas
 
-        data = [data[col].map(punctuation).str.replace(" ", "_").str.lower() for col in data.columns]  # aplica as funções lambda acima em cada coluna, conforma o loop itera sobre as colunas do dataframe, e deixa tudo minúsculo
-        data = pd.DataFrame(data).transpose()  # precisa transpor, senão os atributos viram linhas e vice-versa
-        data[cols] = data[cols].apply(lambda x: x.str.normalize('NFKD').str.encode('ascii', errors='ignore').str.decode('utf-8'))  # remove os acentos das palavras
+
+        """## Formatar células
+        #data = [data[col].str.replace(" ", "_") for col in data.columns]
+        #punctuation = lambda x: re.sub('[%s]' % re.escape(string.punctuation), "_", x)                                  # remove pontuações de qualquer tipo das strings e as substitui por "_"
+        #data = [data[col].map(punctuation).str.replace(" ", "_").str.lower() for col in data.columns]                   # aplica as funções lambda acima em cada coluna, e deixa tudo minúsculo
 """
+
         ############## COORDENADAS ##############
         ###### 1: Remover espaços existentes nas coordenadas
 
@@ -96,8 +101,8 @@ for x in lista_dos_arquivos_csv:
 
         ############## EXPORTAR DATAFRAME PARA EXCEL ##############
 
-        data.to_excel(f'{lista_dos_arquivos_csv[w]}_formatado.xlsx', index=False)                                       # index=False é para não sair com uma coluna com núemro das linhas
-        data.to_csv(f'{lista_dos_arquivos_csv[w]}_formatado.csv', index=False, encoding='utf-8-sig', sep=';')               # sep=';' para salvar os dados já separados
+        data.to_excel(f'{lista_dos_arquivos_csv[w]}_formatado.xlsx', index=False)                                           # index=False é para não sair com uma coluna com núemro das linhas
+        data.to_csv(f'{lista_dos_arquivos_csv[w]}_formatado.csv', index=False, encoding='utf-8-sig', sep=';')               # sep=';' para salvar os dados já separados; utf-8-sig é para as palavras serem salvas corretamente
 
 
 fim = time.time()  # fim do tempo de processamento

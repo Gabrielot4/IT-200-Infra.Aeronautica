@@ -46,13 +46,13 @@ except NoSuchElementException:
 time.sleep(2)
 
 ### DOWNLOAD DO ARQUIVO DE AERÓDROMOS PRIVADOS
-"""try:
+try:
     ad_pub = driver.find_element(by=By.XPATH, value="/html/body/div[3]/div[1]/main/div[2]/div/div[5]/div/p[4]/a[1]")           # clicar no link dos aeródromos públicos
     ad_pub.click()
     print('Download da base de aeródromos privados realizado com sucesso!')
 except NoSuchElementException:
     print("Não foi possível encontrar o caminho do arquivo para realizar o Download da base de aeródromos privados!")
-"""
+
 
 time.sleep(2)
 driver.close()      # para fechar a página web aberta após clicar nos links
