@@ -1,11 +1,11 @@
 ##### CÓDIGO PARA FORMATAR ARQUIVO DE AERÓDROMOS PÚBLICOS - BASE DA ANAC #####
 
-
-##### PARTE 2 - Ler os arquivos baixados
-##### Leitura dos CSV baixados pelo procedimento de WebScraping acima
-##### OBS: após executar o código, dois arquivos são criados no diretório que este código está salvo
-##### OB: se quiser executar o código novamente, é preciso excluir esses dois arquivos criados
+##### PARTE 2 - Ler os arquivos baixados pela part1 do código
+##### OBS: após executar o código, dois arquivos .csv são criados no diretório que este código está salvo
+##### OBS: se quiser executar o código novamente, é preciso excluir esses dois arquivos criados
+"""
 ##### OBS: abrir os arquivos CSV, excluir a primeira linha de cada um deles (caso o método skiprows=1 não funcione) e salvá-los em .xlsx >> não precisa mais
+"""
 
 import os
 import pandas as pd
@@ -15,8 +15,10 @@ import string
 
 inicio = time.time()                                                                                                # começa a contar o tempo de processamento
 
+############################ LEITURA DOS DADOS ############################
+
 ##### Identificar os arquivos CSV que estão no diretório onde está salvo este código
-lista_dos_arquivos_csv = []                                                                                          # lista que vai conter os nomes dos arquivos xlsx
+lista_dos_arquivos_csv = []                                                                                          # lista que vai conter os nomes dos arquivos CSV
 for files in os.listdir('.'):                                                                                        # arquivos devem estar no diretorio onde está salvo esse código
     if files.endswith('.csv'):                                                                                       # se o arquivo terminar com .csv
         lista_dos_arquivos_csv.append(files)                                                                         # adiciono o arquivo com o nome na lista
@@ -26,7 +28,7 @@ lista_das_bases_csv = []                                                    # li
 for x in lista_dos_arquivos_csv:
     data = pd.read_csv(x, sep=';', skiprows=1)                              # separador dos arquivos é ';'
     data = pd.DataFrame(data)
-    lista_das_bases_csv.append(data)
+    lista_das_bases_csv.append(data)                                        # lista com as bases de dados lidas
 
     print('\n \033[1;30;43m Visualização da lista que contém os DataFrames: \033[m \n ', lista_das_bases_csv)
 
@@ -39,10 +41,13 @@ for x in lista_dos_arquivos_csv:
         # aqui pode fazer um IF como condição de ser uma base de dados específica. Ex: se for de aeródromos públicos, segue o código abaixo, senão segue outr (ai vou precisar fazer isso)
 
         data = lista_das_bases_csv[w]                                                       # salvar cada dataframe presente na lista separadamente
-        data = data.fillna("NA")
+        data = data.fillna("NA")                                                            # colocar NA em todas as células que não tem nada
         print(f'\n \033[1;30;43m Visualização do DataFrame {w}, de nome {lista_dos_arquivos_csv[w]}: \033[m \n ', data)
 
-        ############## LIMPAR DADOS: REMOVER CARACTERES ESPECIAIS E SUBSTITUI-LOS POR "_" ##############
+        ############## LIMPAR DADOS: REMOVER CARACTERES ESPECIAIS E SUBSTITUIR ESPAÇOS POR "_" ##############
+
+        data.columns = data.columns.astype(str)     # Converter o tipo de dado para string
+        #print(data.columns.dtype)
 
         ## Formatar nome das colunas
         data.columns = data.columns.str.normalize('NFKD').str.encode('ascii', errors='ignore').str.decode('utf-8').str.replace(" ", "_")  # remove os acentos das palavras e substitui espaços por '_' do nome das colunas

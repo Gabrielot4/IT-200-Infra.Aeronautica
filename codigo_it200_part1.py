@@ -1,7 +1,7 @@
 ##### CÓDIGO PARA FORMATAR ARQUIVO DE AERÓDROMOS PÚBLICOS - BASE DA ANAC #####
 
 ##### PARTE 1 - Fazer o download da base de dados de AD Públicos e AD Privados do site da ANAC por meio de WebScraping #####
-##### OBS: o chromedriver precisar estar atualizado conforme a versão do Chrome: site para instalar o chromedriver: https://chromedriver.chromium.org/downloads #####
+##### OBS: o chromedriver precisar estar atualizado conforme a versão do Chrome: site para baixar o chromedriver: https://chromedriver.chromium.org/downloads | copiar o arquivo.exe e colar na pasta Arquivo de programas x86 do disco C#####
 ##### OBS²: caso os arquivos baixados não vão para o diretório especificado em "download.default_directory", será necessário salvar os arquivos na pasta onde o código de nome: "codigo_it200_part2" está salvo
 
 from selenium import webdriver
